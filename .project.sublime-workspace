@@ -1,0 +1,295 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"cus",
+				"customer_tag"
+			],
+			[
+				"new",
+				"new_url"
+			],
+			[
+				"ra",
+				"rating"
+			],
+			[
+				"Rat",
+				"ratings_tag"
+			],
+			[
+				"Fall",
+				"falldown-3d"
+			],
+			[
+				"rat",
+				"ratings_tag"
+			],
+			[
+				"ne",
+				"new_match"
+			],
+			[
+				"sc",
+				"section"
+			],
+			[
+				"p",
+				"page_id"
+			],
+			[
+				"re",
+				"result"
+			],
+			[
+				"app",
+				"app_name"
+			],
+			[
+				"al",
+				"algorithm_B"
+			],
+			[
+				"algorth",
+				"algorithm_A"
+			],
+			[
+				"tile",
+				"tile_id"
+			],
+			[
+				"le",
+				"length"
+			],
+			[
+				"player",
+				"player_id"
+			],
+			[
+				"best",
+				"best_algorithm"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 35.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 427.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Patrick/Downloads/TimeIntegralVerlet.java",
+		"/C/Users/Patrick/Downloads/TimeIntegralEuler.java",
+		"/C/Users/Patrick/Downloads/Particle3D.java",
+		"/C/Users/Patrick/Downloads/Vector3D.java",
+		"/C/Users/Patrick/Desktop/courseworks/INF2A_CW2_FIN/statements.py",
+		"/C/Users/Patrick/Desktop/Challenge-#2.py",
+		"/C/Users/Patrick/Desktop/courseworks/INF2A_CW2_FIN/semantics.py",
+		"/C/Users/Patrick/Desktop/ffmpeg/README.md",
+		"/C/Users/Patrick/Desktop/ffmpeg/doc/examples/filter_audio.c",
+		"/C/Users/Patrick/Desktop/ffmpeg/doc/examples/scaling_video.c",
+		"/C/Users/Patrick/Desktop/ffmpeg/ffmpeg.c",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/MIPS/hexOut.s",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/MIPS/regex.s",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/INF2C CS cw1/Mips complete/regexINC.c",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/INF2C CS cw1/regex.c",
+		"/C/Users/Patrick/Documents/Coding/RGUHack/src/MyBall.java",
+		"/C/Users/Patrick/Desktop/about-me/html/index.html",
+		"/C/Users/Patrick/Desktop/patchgreen99.github.io/CNAME",
+		"/C/Users/Patrick/Downloads/html-contact-form-code/html-contact-form-code/Html+ PHP/simple-html-contact-form.html",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/MIPS/twosCom.s",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/MIPS/hello.s",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/MIPS/readString.s",
+		"/C/hexplode/simulate.py",
+		"/C/hexplode/the_dictionary",
+		"/C/hexplode/algos/algo_B.py",
+		"/C/hexplode/algos/algo_P.py",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/inf2b_cwk2/thatsMakeItWork.py",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/INF2A CW2/statements.py",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/INF2A CW2/semantics.py",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/INF2A CW2/pos_tagging.py",
+		"/C/hexplode/algos/algo_A.py",
+		"/C/hexplode/game.py",
+		"/C/Users/Patrick/Desktop/courseworks/INF2C CS cw1/charSearch.s",
+		"/C/Users/Patrick/Desktop/courseworks/INF2C CS cw1/Mips complete/regexMIPS.s",
+		"/C/Users/Patrick/Desktop/courseworks/INF2A_CW2_FIN/test.py",
+		"/C/hexplode/algos/example.py",
+		"/C/hexplode/algos/random_player.py",
+		"/C/hexplode/hexplode/app.py",
+		"/C/hexplode/flask_app.py",
+		"/C/hexplode/hexplode/_flask.py",
+		"/C/hexplode/hexplode/dependencies/flask/app.py",
+		"/C/hexplode/algos/example2.py",
+		"/C/hexplode/hexplode/algos.py",
+		"/C/hexplode/uwsgi.py",
+		"/C/hexplode/algos/my_algo.py",
+		"/C/hexplode/README.md",
+		"/C/Users/Patrick/AppData/Roaming/Sublime Text 3/Installed Packages/Package Control.sublime-package",
+		"/C/Users/Patrick/Documents/2nd Year Computer Science/INF2A CW2/test.py",
+		"/C/Users/Patrick/AppData/Roaming/Sublime Text 3/Packages/User/Package Control.sublime-settings",
+		"/C/Users/Patrick/Desktop/CW_1SQL.txt",
+		"/C/Users/Patrick/Desktop/SQL_PROB1.txt",
+		"/C/Users/Patrick/Desktop/AndroidManifest.xml",
+		"/C/Users/Patrick/Documents/Interferometer/Thumbs.db",
+		"/C/Users/Patrick/Desktop/Probability Notes/open book material.pdf"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 21.0
+	},
+	"input":
+	{
+		"height": 29.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 165.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/Python/Python.sublime-build",
+	"project": ".project.sublime-project",
+	"replace":
+	{
+		"height": 38.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 148.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
