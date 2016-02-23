@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.lang.Math;
 
 public class SolarSystem {
@@ -15,6 +16,7 @@ public class SolarSystem {
  */
 private Particle3D[] particleArray;
 private double totalEnergy; 
+private int planets;
 private static double totalInitialMomentum;
 private static double comVelocity;
 private int numberTimesteps;
@@ -24,9 +26,16 @@ private double timestep;
  * Constructor for SolarSystem which contructs an array of particles read from a file and adjusts intial velocities
  * @param  file a String which is the name of the file containing the data on the particles
  * @return  the object
+ * @throws FileNotFoundException 
  */
-	public SolarSystem(String file){
-
+	public SolarSystem(String fileName) throws FileNotFoundException{
+		BufferedReader file = new BufferedReader(new FileReader(fileName));
+	    Scanner scan = new Scanner(file);
+	    this.planets = scan.nextInt();
+	    particleArray = new Particle3D[planets];
+	    for( int i = 0 ; i < planets ; i++){
+	    	this.particleArray[i] = new Particle3D(scan);
+	    }
 	}
 
 /**
@@ -44,6 +53,14 @@ private double timestep;
  */
 	public void setTotalEnergy(double energy){
 		totalEnergy = energy;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getPlanets(){
+		return this.planets;
 	}
 
 /**
@@ -75,42 +92,55 @@ private double timestep;
  * @return 2 /n Point = 1 /n s11 x11 y11 z11 where 2 is the index of the plot point is the index of timesteps and the tuple geolocates the particle
  */
 	public String toString(){
-		return "";
-	}
-
-
-/**
- * Returns the seperation vector of the orbit for particle with index particle 
- * @param  integer equal to the particle index
- * @return returns the orbital radius of that particle
- */
-	public Vector3D getOrbitalSeperation(int particle){
-		return new Vector3D();
+		String answer = "";
+		for(int i = 0 ; i < particleArray.length ; i++){
+			answer = answer + particleArray[i].toString()+"/n" ;
+		}
+		return answer ;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * updates the velocity of the particle with new timstep
+ * updates the velocity of the particle with new timestep
  * @param timestep is a double of the updated timestep
  */
-	public void updateVelocity(double timestep){
+	public void updateAllVelocity(double timestep, int planets){
+		Vector3D[] originalForce = new Vector3D[planets];
+		Vector3D[] newForce = new Vector3D[planets];
+		for(int i = 0 ; i < planets  ; i++){
+			originalForce[i] = particleArray[i].getForce();
+		}
 		
+		updateAllForce();
+		for(int j = 0 ; j < particleArray.length ; j++){	
+			newForce[j] = particleArray[j].getForce();
+			particleArray[j].updateVelocity(timestep,Vector3D.addVector3D(originalForce[j], newForce[j]).scalarMul(0.5));
+		}
 	}
 
 /**
  * updates the position of the particle given the new timestep
  * @param timestep is a double of which to update the timestep
  */
-	public  void updatePosition(double timestep){
-
+	public void updateAllPosition(double timestep){
+		for(int i = 0 ; i < particleArray.length ; i++){
+			particleArray[i].updatePosition(timestep);
+		}
 	} 
 
 /**
  * Updates the force of each particle given the new velocity, position and sums the gravitational attractive force from every other particle in the SolarSystem
  */
-	public void updateForce(){
-
+	public void updateAllForce(){
+		for(int i = 0 ; i < particleArray.length ; i++){
+			for(int j = i ; j < particleArray.length ; j++){
+					Vector3D tempForce = Particle3D.getGravitationalAttraction(particleArray[i],particleArray[j]);
+					particleArray[i].setForce(tempForce);
+					particleArray[j].setForce(tempForce.scalarMul(-1.0));
+			}
+		}
+		
 	}
 
 
@@ -149,30 +179,6 @@ private double timestep;
 		return 1.0;
 	}
 
-
-
-	/**
-	 * Constructor that sets up an array of Particle3D objects taken from ( SUN input file what ever we want ,  can have v = 0)
-	 * SolarSystem class to store data for particles in the system and then simulates the system over time using integration algorithms and writes a trajectory file with the simulation results so that these can be visualised using VMD
-	 * @param  a         object SolarSystem in which the simulation will take place in
-	 * @param  num_steps integer that gives number of steps in integration
-	 * @param  step      double that gives the magnitude of each timestep in the integration
-	 * @return           returns object N_body_simulation
-	 */
-		public N_body_simulation(SolarSystem a , int num_steps, double step){
-
-		}
-
-	/**
-	 * Contructs a simulation that is the gravitational interaction of N bodies by reading the planetary data and simulation constants file.
-	 * @param  sim_file    name of a file in which the simulation parameters are written to once they have been calculated
-	 * @param  planet_File name of a file containing the details of the bodies in the system
-	 * @return             a simulation of the solar system as a set of parameters that can be visualised using VMD
-	 */
-		public N_body_simulation(String sim_file, String planet_File){
-
-		}
-
 	/**
 	 * returns integer number of timesteps set in the simulation is retrieved
 	 * @return integer representing the number of timesteps
@@ -205,26 +211,6 @@ private double timestep;
 
 		}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * A verlet update in which the velocity and position of each planet is updated per time step
-	 * @param timestep double equal to the timestep of the simulation
-	 */
-
-	    public static void verletUpdate(double timestep){
-		
-		// Update the position using current velocity and force
-		//orbiter.updatePosition(timestep,TimeIntegral.getForce());
-		// Update forces based on new positions
-		//Vector3D force_new = TimeIntegral.getGravity(orbiter,orbitee);
-		
-		// Update the velocity, based on average of current and new force
-		//orbiter.updateVelocity(timestep,Vector3D.addVector3D(TimeIntegral.getForce(), force_new).scalarMul(0.5));
-		
-		// Update the force variable to the new value
-		//TimeIntegral.setForce(force_new);
-	    }
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 
@@ -234,11 +220,20 @@ private double timestep;
 	 * @throws IOException ensures that program goes into a try/catch block where program can be checked for errors and rectified
 	 */
 		public static void main(String[] args) throws IOException {
+			int timestep = 1; 
+			SolarSystem s = new SolarSystem(args[0]);
+			// Update the position using current velocity and force
+			s.updateAllPosition(timestep);
+			// Update forces based on new positions
+			// Update the velocity, based on average of current and new force
+			// Update the force variable to the new value
+			s.updateAllVelocity(timestep, s.getPlanets());
 
 		}
-	}
+	
 
 }
+
 
 
 

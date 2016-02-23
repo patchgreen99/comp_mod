@@ -236,23 +236,14 @@ public class Particle3D {
     public void updateVelocity(double timestep, Vector3D force){
         this.setv(Vector3D.addVector3D(this.getv(), force.scalarMul(timestep/this.getMass())));
     }
-    //updating the position knowing the timestep
-    
-    /**Updates the position given the timestep
-     * 
-     * @param timestep is a double which updates the position
-     */
-    public void updatePosition(double timestep){
-        this.setx(Vector3D.addVector3D(this.getx(),this.getv().scalarMul(timestep)));
-    }
     //update position knowing the force and timestep
     /**Updates the position given the force and the timestep
      * 
      * @param timestep is a double that updates the position
      * @param force is a vector that updates the position
      */
-    public void updatePosition(double timestep, Vector3D force){
-        this.setx(Vector3D.addVector3D(Vector3D.addVector3D(this.getx(),this.getv().scalarMul(timestep)),force.scalarMul(0.5*timestep*timestep/this.getMass())));
+    public void updatePosition(double timestep){
+        this.setx(Vector3D.addVector3D(Vector3D.addVector3D(this.getx(),this.getv().scalarMul(timestep)),this.getForce().scalarMul(0.5*timestep*timestep/this.getMass())));
     }
     //distance between two particles   
     /**Calculates the seperation vector between two particles
@@ -275,8 +266,11 @@ public class Particle3D {
      * @param  bigG   [description]
      * @return        Vector3D the force that is acting on the particle
      */
-    public static Vector3D gravitationalAttraction(Particle3D particle, Particle3D star, double bigG){
-        return new Vector3D();
+    public static Vector3D getGravitationalAttraction(Particle3D moon, Particle3D star){
+    	double bigG = 1.0;
+        return Vector3D.subVector3D(moon.getx(), star.getx()).scalarMul
+        	    (bigG*moon.getMass()*star.getMass()*-1.0*
+        	   	     Math.pow(Vector3D.subVector3D(moon.getx(), star.getx()).magnitude(),-3.0));
     }
 
 
@@ -285,10 +279,12 @@ public class Particle3D {
      * @param  particle one Particle3D in the system
      * @param  star   another Particle3D in the system
      * @param  bigG   [description]
-     * @return        a double equal to the total energyy for that pair of particles
+     * @return        a double equal to the total energy for that pair of particles
      */
-    public static double totalEnergy(Particle3D particle, Particle3D star, double bigG){
-        return 1.0;   
+    public static double halfTotalEnergy(Particle3D planet1, Particle3D planet2){
+    	double bigG = 1.0;
+    	return (planet1.getKE() + planet2.getKE() - bigG*planet1.getMass()*planet2.getMass()
+    		    /Vector3D.subVector3D(planet1.getx(), planet2.getx()).magnitude())*0.5;   
     }
 
 
