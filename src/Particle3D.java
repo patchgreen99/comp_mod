@@ -2,11 +2,14 @@
  * Particle3D class to obtain the energy of the particle, its force and distance between particles 
  * Class variables :     private Vector3D v, private Vector3D x, private double mass, private String label, private Vector3D force
  */
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.Math;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 //Using Vector3D to define a particle's velocity, mass and position in vector components.
 public class Particle3D {
@@ -20,6 +23,11 @@ public class Particle3D {
     private double mass;
     private String label;
     private Vector3D force;
+    private ArrayList<Double> angleStack;
+	private ArrayList<Double> timeStack;
+	private double period;
+	private double aphelion;
+	private double perihelion;
     
     /* 
      * Default constructor to set the Particle3D to zero
@@ -31,51 +39,11 @@ public class Particle3D {
         mass = 0;
         label = null;
         force = new Vector3D();
-    }
-    /**Explicit constructor. Constructs a new Particle3D from given x, y and z components, it's mass and label
-     * 
-     * @param X is a 3D vector of it's position.
-     * @param V is a 3D vector of its velocity.
-     * @param m is a double and gives the mass of the particle.
-     * @param lab is a String and gives the label of the particle.
-     */
-//Partcile's position vector, velocity vector and its label.
-    public Particle3D(Vector3D X, Vector3D V, double m, String lab){
-        x = X;
-        v = V;
-        mass = m;
-        label = lab;
-        force = new Vector3D();
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-    
-    //Method for setting the components of particle3D; velocity, position mass and the label.
-    
-    /**Convenient set method to set all of the components
-     * 
-     * @param xx is a double and sets the x position component of the instance Particle3D.
-     * @param xy is a double and sets the y position component of the instance Particle3D.
-     * @param xz is a double and sets the z position component of the instance Particle3D.
-     * @param vx is a double and sets the x velocity component of the instance Particle3D.
-     * @param vy is a double and sets the y velocity component of the instance Particle3D.
-     * @param vz is a double and sets the z velocity component of the instance Particle3D.
-     */
-    
-    public void setParticle3D(double xx, double xy, double xz, double vx, double vy, double vz ){
-        this.v.setVector3D(vx,vy,vz);
-        this.x.setVector3D(xx,xy,xz);
-    }
-    
-    /**Sets the vector components for the Particle 3D
-     * 
-     * @param x is 3D position vector of the particle.
-     * @param v is 3D velocity vector of the particle.
-     */
-    
-    public void setParticle3D(Vector3D x, Vector3D v){
-        this.v = v;
-        this.x = x;
+        angleStack = new ArrayList<Double>();
+		timeStack = new ArrayList<Double>();
+		period = 1000000000;
+		aphelion = 0;
+		perihelion = 10E100;
     }
     
     /**Sets the velocity vector of the particle
@@ -83,7 +51,7 @@ public class Particle3D {
      * @param v is a 3D velocity vector and sets the velocity vector
      */
     
-    public void setv(Vector3D v){
+    public void setVelocity(Vector3D v){
         this.v = v;
     }
     
@@ -91,7 +59,7 @@ public class Particle3D {
      * 
      * @param x is a 3D position vector and set the position vector
      */
-    public void setx(Vector3D x){
+    public void setPosition(Vector3D x){
         this.x = x;
     }
     
@@ -123,6 +91,35 @@ public class Particle3D {
         this.force = f;
     }
     
+    public void addTimeStack(Double e){
+        this.timeStack.add(e);
+    }
+    
+    public void addAngleStack(Double e){
+        this.angleStack.add(e);
+    }
+    
+    public void removeTimeStack(){
+        this.timeStack.remove(0);
+    }
+    
+    public void removeAngleStack(){
+        this.angleStack.remove(0);
+    }
+    
+    public void setPeriod(double e){
+        this.period = e;
+    }
+    
+    public void setAphelion(double e){
+        this.aphelion = e;
+    }
+    
+    public void setPerihelion(double e){
+        this.perihelion = e;
+    }
+    
+    
     ///////////////////////////////////////////////////////
     //Getter method for velocity, position, mass and the label of the 3D particle
     
@@ -131,7 +128,7 @@ public class Particle3D {
      * @return a velocity vector instance representing the Particle3D velocity Vector.
      */
     
-    public Vector3D getv(){
+    public Vector3D getVelocity(){
         return this.v;
     }
     
@@ -140,7 +137,7 @@ public class Particle3D {
      * @return a position vector instance representing the Particle3D position Vector.
      */
     
-    public Vector3D getx(){
+    public Vector3D getPosition(){
         return this.x;
     }
     
@@ -169,6 +166,34 @@ public class Particle3D {
     public Vector3D getForce(){
         return this.force;
     }
+    
+    public ArrayList<Double> getTimeStack(){
+        return this.timeStack;
+    }
+    
+    public ArrayList<Double> getAngleStack(){
+        return this.angleStack;
+    }
+    
+    public double getPeriod(){
+        return this.period;
+    }
+    
+    public double getAphelion(){
+        return this.aphelion;
+    }
+    
+    public double getPerihelion(){
+        return this.perihelion;
+    }
+    
+    public double getEccentricity(){
+        return (this.aphelion-this.perihelion)/(this.aphelion+this.perihelion);
+    }
+    
+    public double getSemiMajorAxis(){
+        return getAphelion()/(1+getEccentricity());
+    }
     /////////////////////////////////////////////////////////////
     
     //Prints particles position in a readable form
@@ -178,10 +203,11 @@ public class Particle3D {
      */
     public String toString(){
         String tempLabel = this.getLabel();
-        double x1_str = this.getx().getX();
-        double x2_str = this.getx().getY();
-        double x3_str = this.getx().getZ();
-        return tempLabel+"	"+x1_str+"	"+x2_str+"	"+x3_str;
+        double x1_str = this.getPosition().getX();
+        double x2_str = this.getPosition().getY();
+        double x3_str = this.getPosition().getZ();
+        DecimalFormat format = new DecimalFormat("0.00E00");
+        return tempLabel+" "+format.format(x1_str)+" "+format.format(x2_str)+" "+format.format(x3_str);
     }
     /////////////////////////////////////////////////////////////
 
@@ -192,11 +218,16 @@ public class Particle3D {
      * @param scan gives the values scanned from the file.
      */
     public Particle3D(Scanner scan){
-        label = scan.next();
+        label = (String) scan.next();
         mass = scan.nextDouble();
-        x = new Vector3D(scan.nextDouble(), scan.nextDouble(), scan.nextDouble());
-        v = new Vector3D(scan.nextDouble(), scan.nextDouble(), scan.nextDouble());
+        x = new Vector3D(scan.nextDouble(), scan.nextDouble(), scan.nextDouble()).scalarMul(1.49597870700E+11); //meters
+        v = new Vector3D(scan.nextDouble(), scan.nextDouble(), scan.nextDouble()).scalarMul(1.49597870700E+11/86400.0); // meters per second
         force = new Vector3D();
+        angleStack = new ArrayList<Double>();
+		timeStack = new ArrayList<Double>();
+		period = 1000000000;
+		aphelion = 0;
+		perihelion = 10E100;
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -208,8 +239,8 @@ public class Particle3D {
     * position vector and velocity vector.
     */
     public double getKE(){
-        return 0.5*this.getMass()*(this.getv().getX()*this.getv().getX()+this.getv().getY()*this.getv().getY()
-                +this.getv().getZ()*this.getv().getZ());
+        return 0.5*this.getMass()*(this.getVelocity().getX()*this.getVelocity().getX()+this.getVelocity().getY()*this.getVelocity().getY()
+                +this.getVelocity().getZ()*this.getVelocity().getZ());
     }
     //updating the velocity knowing the force and timestep
     
@@ -218,8 +249,9 @@ public class Particle3D {
      * @param timestep is a double which updates timestep
      * @param force is a vector which updates the force
      */
-    public void updateVelocity(double timestep, Vector3D force){
-        this.setv(Vector3D.addVector3D(this.getv(), force.scalarMul(timestep/this.getMass())));
+    public void updateVelocity(double timestep, Vector3D tempForce){
+    	Vector3D tempVelocity = this.getVelocity();
+        this.setVelocity(Vector3D.addVector3D(tempVelocity, tempForce.scalarMul(timestep/this.getMass())));
     }
     //update position knowing the force and timestep
     /**Updates the position given the force and the timestep
@@ -228,34 +260,33 @@ public class Particle3D {
      * @param force is a vector that updates the position
      */
     public void updatePosition(double timestep){
-        this.setx(Vector3D.addVector3D(Vector3D.addVector3D(this.getx(),this.getv().scalarMul(timestep)),this.getForce().scalarMul(0.5*timestep*timestep/this.getMass())));
+    	Vector3D tempPosition = this.getPosition();
+        this.setPosition(Vector3D.addVector3D(Vector3D.addVector3D(tempPosition,this.getVelocity().scalarMul(timestep)),this.getForce().scalarMul(0.5*timestep*timestep/this.getMass())));
     }
     //distance between two particles   
-    /**Calculates the seperation vector between two particles
+    /**Calculates the seperation vector between two particles VECTOR FROM b TO a
      * 
      * @param a is the reference Particle3D
      * @param b is the Particle3D a distance away
-     * @return the Vector3D  between the two particles pointing away from a
+     * @return the Vector3D  between the two particles 
      */
     public static Vector3D seperationAway(Particle3D a, Particle3D b){
-        return Vector3D.subVector3D(a.getx(),b.getx());
+        return Vector3D.subVector3D(a.getPosition(),b.getPosition());
     }
-
 
     //Static Methods
 
     /**
-     * gravitational force on the particle with respect to the star
+     * gravitational force on the particle with respect to the star pointing from moon to star
      * @param  particle Particle3D on which the force is acting 
      * @param  star   Particle3D by which the attraction is happening
      * @param  bigG   [description]
      * @return        Vector3D the force that is acting on the particle
      */
-    public static Vector3D getGravitationalAttraction(Particle3D moon, Particle3D star){
-    	double bigG = 1.0;
-        return Vector3D.subVector3D(moon.getx(), star.getx()).scalarMul
+    public static Vector3D getGravitationalAttraction(Particle3D moon, Particle3D star, double bigG){
+        return Particle3D.seperationAway(moon, star).scalarMul
         	    (bigG*moon.getMass()*star.getMass()*-1.0*
-        	   	     Math.pow(Vector3D.subVector3D(moon.getx(), star.getx()).magnitude(),-3.0));
+        	   	     Math.pow(Particle3D.seperationAway(moon, star).magnitude(),-3.0));
     }
 
 
@@ -266,51 +297,49 @@ public class Particle3D {
      * @param  bigG   [description]
      * @return        a double equal to the total energy for that pair of particles
      */
-    public static double getGravEnergy(Particle3D planet1, Particle3D planet2){
-    	double bigG = 1.0;
+    public static double getGravEnergy(Particle3D planet1, Particle3D planet2, double bigG){
     	return  - (bigG*planet1.getMass()*planet2.getMass())
-    		    /(Vector3D.subVector3D(planet1.getx(), planet2.getx()).magnitude());   
+    		    /(Particle3D.seperationAway(planet1, planet2).magnitude());   
     }
     
     /**
-     * Returns the angle of orbit from 180 to -180 with zero on the sun's position vector 
+     * Returns the angle of orbit from -180 to 180 with zero on the sun's position vector 
      * @param  integer of the particle in question
      * @param  fractionOfOrbit fraction of the orbit
      * @return returns the number of orbits
      */
     	public static double orbitAngle(Particle3D moon, Particle3D sun){
     		Vector3D seperation = Particle3D.seperationAway(sun, moon); //sun to moon
-    		double cosine = Vector3D.dotVector3D(seperation,sun.getx().scalarMul(-1.0))/(seperation.magnitude()*sun.getx().magnitude());
-    		double sine = Vector3D.crossVector3D(seperation,sun.getx().scalarMul(-1.0)).magnitude()/(seperation.magnitude()*sun.getx().magnitude());
-    		if(cosine > 0 && sine > 0 ){
-    			return Math.toDegrees(Math.asin(sine));
-    		}
-    		else if(cosine > 0 && sine < 0){
-    			return Math.toDegrees(Math.asin(sine)) + 360;
-    		}
-    		else if(sine > 0){
-    			return 180-Math.toDegrees(Math.asin(sine));
-    		}
-    		else{
-    			return 180-Math.toDegrees(Math.asin(sine));
+    		double cosine = Vector3D.dotVector3D(seperation,sun.getPosition().scalarMul(-1.0))/(seperation.magnitude()*sun.getPosition().magnitude());
+    		double sine = Vector3D.crossVector3D(seperation,sun.getPosition().scalarMul(-1.0)).magnitude()/(seperation.magnitude()*sun.getPosition().magnitude());
+    		if (cosine >= 0){
+    				//System.out.print(Math.toDegrees(Math.asin(sine))+"\n");
+                    return Math.toDegrees(Math.asin(sine));
+    		}else{
+                    double temp_angle = Math.toDegrees(Math.asin(sine));
+                    if (temp_angle >= 0){
+                    	//System.out.print(180 - temp_angle+"\n");
+                        return 180 - temp_angle;
+                    }
+                    else{
+                    	//System.out.print(-(180 + temp_angle)+"\n");
+                        return -(180 + temp_angle);
+                    }
     		}
     	}
 
 
     /**
-     * Outputs the velocity tangential to the orbit of the particle given it is circular about the star v = sqrt(m1 + m2/ r) m1,m2 mass of the particles and r is the radius of the orbit.
+     * sets velocity of moon to do circular orbit
      * @param  particle the orbiting particle with the outputted velocity
-     * @param  star   the particle its orbitiing around 
-     * @return        a Vector3D equal to the velocity of the particle to cause a cirular orbit v = sqrt(m1 + m2/ r) m1,m2 mass of the particles and r is the radius of the orbit
+     * @param  star   the particle its orbiting around 
      */
-    public static Vector3D tangetialVelocity(Particle3D moon, Particle3D star){
-       return new Vector3D();        
+    public static void setCircularOrbit(Particle3D moon, Particle3D star){
+    	Vector3D moonDirection = moon.getVelocity().scalarDiv(moon.getVelocity().magnitude());
+    	double factor = Math.sqrt((moon.getMass()+star.getMass())/Particle3D.seperationAway(moon, star).magnitude());
+    	moon.setVelocity(moonDirection.scalarMul(factor)); 
     }    
 
-
-
-
- 
 
 }
 
